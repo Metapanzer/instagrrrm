@@ -1,12 +1,14 @@
+//import .env
+require("dotenv").config();
 //Import mysql dependencies
 const mysql = require("mysql2");
 
 //Database connection setting
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "1234",
-  database: "instagram_clone",
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
 });
 
 db.connect((err) => {
