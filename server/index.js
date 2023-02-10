@@ -23,18 +23,20 @@ app.use((req, res, next) => {
 });
 
 // ### Sequelize Synchronous
-// const Sequelize = require('sequelize');
-// const Models = require('./models');
-// Models.sequelize.sync({
-//     force : false,
+// const Sequelize = require("sequelize");
+// const Models = require("./models");
+// Models.sequelize
+//   .sync({
+//     force: false,
 //     alter: true,
-//     logging : console.log
-// }).then(function () {
-//     console.log('Database is Synchronized!')
-
-// }).catch(function (err) {
-//     console.log(err, "Something Went Wrong with Database Update!")
-// });
+//     logging: console.log,
+//   })
+//   .then(function () {
+//     console.log("Database is Synchronized!");
+//   })
+//   .catch(function (err) {
+//     console.log(err, "Something Went Wrong with Database Update!");
+//   });
 
 //Import router for controller from index.js inside routers folder
 const { userRouters } = require("./routers"); //refer to index.js in routers folder
