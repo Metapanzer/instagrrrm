@@ -1,4 +1,5 @@
 //Import ExpressJS dependencies
+require("dotenv").config();
 const express = require("express");
 const app = express();
 
@@ -6,21 +7,14 @@ const app = express();
 app.use(express.json());
 
 //Define PORT and response for default route
-const PORT = 5000;
+const PORT = process.env.DATABASE_PORT;
 app.get("/", (req, res) => {
   res.status(201).send("<h1>Welcome to instagram<h1>");
 });
 
 //CORS (granting access from different network (front end to back end))
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+const cors = require("cors");
+app.use(cors());
 
 // ### Sequelize Synchronous
 // const Sequelize = require("sequelize");

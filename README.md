@@ -6,7 +6,7 @@
 - Library:
 
   - Frontend: tailwindcss, chakraui, react router dom, react hot toast, react icon, formik, yup, axios,
-  - Backend: express, mysql2, cors, json web token, bcrypt, nodemailer, multer, dotenv, handlebars
+  - Backend: express, mysql2, cors, jsonwebtoken, bcrypt, nodemailer, multer, dotenv, handlebars
 
 - Installation:
 
@@ -14,7 +14,7 @@
   - tailwindcss: <pre><code>npm install -D tailwindcss</code></pre>
   <pre><code>npx tailwindcss init</code></pre>
 
-  - Backend: <pre><code>npm i express body-parser mysql2 cors json-web-token bcrypt multer nodemailer dotenv handlebars</code></pre>
+  - Backend: <pre><code>npm i express body-parser mysql2 cors jsonwebtoken bcrypt multer nodemailer dotenv handlebars</code></pre>
   - ORM: <pre><code>npm install --save-dev sequelize sequelize-cli</code></pre>
     <pre><code>npx sequelize-cli init</code></pre>
 
