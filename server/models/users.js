@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         unique: {
           args: true,
-          msg: "Username already in Use",
+          msg: "Username already exist",
         },
       },
       password: DataTypes.STRING,
@@ -34,12 +34,18 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isEmail: { msg: "Invalid email" },
         },
-        unique: true,
+        unique: {
+          args: true,
+          msg: "Email already exist",
+        },
       },
       profile_picture: DataTypes.STRING,
       fullname: DataTypes.STRING,
       bio: DataTypes.STRING,
-      is_verified: DataTypes.BOOLEAN,
+      is_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       sequelize,

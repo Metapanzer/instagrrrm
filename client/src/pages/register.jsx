@@ -1,126 +1,207 @@
+//Import dependencies
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { Button } from "@chakra-ui/react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function Register() {
-  const [data, setData] = useState();
+  // const [data, setData] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  let username = useRef();
-  let email = useRef();
-  let password = useRef();
 
-  const submitRegister = async () => {
+  const handleRegister = async (values) => {
     try {
-      let dataToSend = {
-        username: username.current.value,
-        email: email.current.value,
-        password: password.current.value,
-      };
-
-      await axios.post("http://localhost:2000/users", dataToSend);
-      username.current.value = "";
-      email.current.value = "";
-      password.current.value = "";
-      alert("Pendaftaran Berhasil!");
-      navigate("/");
+      setIsLoading(true);
+      await axios.post("http://localhost:5000/register", {
+        email: values.email,
+        username: values.username,
+        fullname: values.fullname,
+        password: values.password,
+      });
+      toast.success("Account Registration Success!");
+      setIsLoading(false);
+      setTimeout(() => navigate("/login"), 3000);
     } catch (error) {
-      console.log(error);
+      setIsLoading(false);
+      toast.error(error?.response?.data?.message);
     }
   };
 
   //Validasi Formik/yup
-  const LoginSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(6, "Username consist of minimum 6 character!")
-      .required("Username is required"),
+  const RegisterSchema = Yup.object().shape({
     email: Yup.string()
       .email("Email is not valid!")
       .required("Email is required!"),
+    fullname: Yup.string()
+      .min(3, "Full name minimum 3 character!")
+      .required("Full name is required"),
+    username: Yup.string()
+      .min(3, "Username minimum 3 character!")
+      .required("Username is required"),
     password: Yup.string()
       .min(8, "Password minimum 8 character")
       .required("Password is required!")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
+        "Must Contain at least One Uppercase, One Lowercase, One Number and One Special Case Character"
       ),
+    confirmpassword: Yup.string().oneOf(
+      [Yup.ref("password"), null],
+      "Passwords must match"
+    ),
   });
 
   return (
-    <div className="flex justify-center">
-      <div className="flex flex-col p-8 gap-3 mt-3 w-[347px] h-[617px] border border-slate-300 drop-shadow-md bg-white items-center justify-around">
-        <h1>Instgrrrm</h1>
-        <p>Sign up to see photos and videos from your friends.</p>
+    <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col p-9 gap-3 mt-3 w-[347px] h-[617px] border border-slate-300 drop-shadow-md bg-white items-center text-center justify-center">
+        <h1 className="font-bold text-4xl font-[Billabong]">Instgrrrm</h1>
+        <p className="text-slate-500 font-semibold">
+          Sign up to see photos and videos from your friends.
+        </p>
         <Formik
-          initialValues={{ username: "", email: "", password: "" }}
-          validationSchema={LoginSchema}
-          onSubmit={(values) => setData(values)}
+          initialValues={{
+            email: "",
+            fullname: "",
+            username: "",
+            password: "",
+            confirmpassword: "",
+          }}
+          validationSchema={RegisterSchema}
+          onSubmit={(values) => handleRegister(values)}
         >
           {(props) => {
-            console.log(props);
             return (
               <Form>
-                <label htmlFor="username">
-                  <p className="mt-3">Name</p>
-                </label>
                 <Field
-                  //   ref={username}
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Input username"
-                  className="rounded-md h-8 mt-1"
-                />
-                <ErrorMessage
-                  component={"div"}
-                  name="username"
-                  className="text-red-500"
-                />
-                <label htmlFor="email">
-                  <p className="mt-3">Email</p>
-                </label>
-                <Field
-                  //   ref={email}
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="Input email"
-                  className="rounded-md h-8 mt-1"
+                  placeholder="Email"
+                  className="border border-slate-300 bg-slate-100 rounded-sm h-9 w-full mt-3 p-2"
                 />
                 <ErrorMessage
                   component={"div"}
                   name="email"
                   className="text-red-500"
                 />
-                <label htmlFor="password">
-                  <p className="mt-3">Password</p>
-                </label>
                 <Field
-                  //   ref={password}
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Input password"
-                  className="rounded-md h-8 mt-1"
+                  type="text"
+                  name="fullname"
+                  id="fullname"
+                  placeholder="Full name"
+                  className="border border-slate-300 bg-slate-100 rounded-sm h-9 w-full mt-3 p-2"
                 />
                 <ErrorMessage
                   component={"div"}
-                  name="password"
+                  name="fullname"
                   className="text-red-500"
                 />
-                <button
+                <Field
+                  type="text"
+                  name="username"
+                  id="username"
+                  placeholder="Username"
+                  className="border border-slate-300 bg-slate-100 rounded-sm h-9 w-full mt-3 p-2"
+                />
+                <ErrorMessage
+                  component={"div"}
+                  name="username"
+                  className="text-red-500"
+                />
+                <div className="relative">
+                  <Field
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    id="password"
+                    placeholder="Password"
+                    className="border border-slate-300 bg-slate-100 rounded-sm h-9 w-full mt-3 p-2"
+                  />
+                  <ErrorMessage
+                    component={"div"}
+                    name="password"
+                    className="text-red-500"
+                  />
+                  {showPassword ? (
+                    <AiOutlineEyeInvisible
+                      className="absolute right-0 top-0 mt-6 mr-3"
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  ) : (
+                    <AiOutlineEye
+                      className="absolute right-0 top-0 mt-6 mr-3"
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  )}
+                </div>
+                <div className="relative">
+                  <Field
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmpassword"
+                    id="confirmpassword"
+                    placeholder="Confirm password"
+                    className="border border-slate-300 bg-slate-100 rounded-sm h-9 w-full mt-3 p-2"
+                  />
+                  <ErrorMessage
+                    component={"div"}
+                    name="confirmpassword"
+                    className="text-red-500"
+                  />
+                  {showConfirmPassword ? (
+                    <AiOutlineEyeInvisible
+                      className="absolute right-0 top-0 mt-6 mr-3"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    />
+                  ) : (
+                    <AiOutlineEye
+                      className="absolute right-0 top-0 mt-6 mr-3"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    />
+                  )}
+                </div>
+                <p className="text-xs text-slate-400 mt-3">
+                  People who use our service may have uploaded your contact
+                  information to Instagrrrm.
+                </p>
+                <p className="text-xs text-slate-400 mt-3 mb-3">
+                  By signing up, you agree to our Terms ,Privacy Policy and
+                  Cookies Policy.
+                </p>
+                <Button
+                  isLoading={isLoading}
+                  loadingText="Submitting"
+                  colorScheme="twitter"
                   type="submit"
-                  className="mt-3 bg-slate-400 rounded-md w-fit p-2 font-bold self-center"
-                  onClick={() => submitRegister()}
+                  className="w-full mb-3"
                 >
                   Sign up
-                </button>
+                </Button>
               </Form>
             );
           }}
         </Formik>
       </div>
+      <div className="flex flex-col p-8 mt-3 mb-3 w-[347px] h-[67px] border border-slate-300 drop-shadow-md bg-white items-center justify-around">
+        <p>
+          Have an account?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            className="text-blue-400 active:text-blue-200 "
+          >
+            Log in
+          </span>
+        </p>
+      </div>
+      <Toaster />
     </div>
   );
 }

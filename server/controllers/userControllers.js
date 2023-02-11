@@ -1,7 +1,3 @@
-// const db = require("../connection/conn");
-// const util = require("util");
-// const query = util.promisify(db.query).bind(db);
-
 // Import Sequelize
 const { sequelize } = require("./../models");
 const { Op } = require("sequelize");
@@ -15,29 +11,47 @@ const { hashPassword, hashMatch } = require("./../lib/hash");
 
 // Import jwt
 const { createToken } = require("./../lib/jwt");
+const transporter = require("./../helpers/transporter");
+const fs = require("fs").promises;
+const handlebars = require("handlebars");
 
 module.exports = {
   register: async (req, res) => {
     const t = await sequelize.transaction();
     try {
-      let { username, email, password, role } = req.body; // {}
+      let { email, fullname, username, password } = req.body; // {}
+      await users.create(
+        {
+          email,
+          fullname,
+          username,
+          password: await hashPassword(password),
+        },
+        { transaction: t }
+      );
 
-      await users.create({
-        username,
-        email,
-        password: await hashPassword(password),
-        role,
+      let template = await fs.readFile("./template/verification.html", "utf-8");
+      let compiledTemplate = await handlebars.compile(template);
+      let newTemplate = compiledTemplate({
+        fullname: fullname,
       });
-
+      await transporter.sendMail({
+        from: "Instagrrrm",
+        to: email,
+        subject: "Email Verification",
+        html: newTemplate,
+      });
+      t.commit();
       res.status(201).send({
         isError: false,
         message: "Register Success",
         data: null,
       });
     } catch (error) {
-      res.status(500).send({
+      t.rollback();
+      res.status(409).send({
         isError: true,
-        message: error.errors[0].message,
+        message: error?.errors[0]?.message,
         data: null,
       });
     }
@@ -45,15 +59,15 @@ module.exports = {
 
   login: async (req, res) => {
     try {
-      let { usernameOrEmail, password } = req.query;
+      let { emailOrUsername, password } = req.body;
 
-      let findUsernameOrEmail = await users.findOne({
+      let findEmailOrUsername = await users.findOne({
         where: {
-          [Op.or]: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+          [Op.or]: [{ username: emailOrUsername }, { email: emailOrUsername }],
         },
       });
 
-      if (!findUsernameOrEmail)
+      if (!findEmailOrUsername)
         return res.status(404).send({
           isError: true,
           message: "Username or Email Not Found",
@@ -62,13 +76,13 @@ module.exports = {
 
       let hasMatchResult = await hashMatch(
         password,
-        findUsernameOrEmail.dataValues.password
+        findEmailOrUsername.dataValues.password
       );
 
       if (hasMatchResult === false)
         return res.status(404).send({
           isError: true,
-          message: "Password Not Valid",
+          message: "Incorrect password",
           data: true,
         });
 
@@ -76,7 +90,7 @@ module.exports = {
         isError: false,
         message: "Login Success",
         data: {
-          token: createToken({ id: findUsernameOrEmail.dataValues.id }),
+          token: createToken({ id: findEmailOrUsername.dataValues.id }),
         },
       });
     } catch (error) {
