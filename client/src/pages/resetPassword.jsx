@@ -40,7 +40,7 @@ export default function ResetPassword() {
   });
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="w-screen flex flex-col items-center">
       <div className="flex flex-col p-8 gap-3 mt-3 w-[347px] h-[397px] border border-slate-300 drop-shadow-md bg-white items-center text-center justify-center">
         <TfiLock className="w-1/3 h-1/3" />
         <h1 className="font-semibold text-xl">Trouble logging in?</h1>

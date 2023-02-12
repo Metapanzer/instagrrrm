@@ -58,7 +58,7 @@ export default function Register() {
   });
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="w-screen flex flex-col items-center">
       <div className="flex flex-col p-9 gap-3 mt-3 w-[347px] h-[617px] border border-slate-300 drop-shadow-md bg-white items-center text-center justify-center">
         <h1 className="font-semibold text-5xl font-satisfy mb-2">Instgrrrm</h1>
         <p className="text-slate-500 font-semibold">

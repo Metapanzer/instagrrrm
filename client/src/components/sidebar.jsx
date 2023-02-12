@@ -1,0 +1,62 @@
+import { Link, useNavigate } from "react-router-dom";
+import { BiHomeAlt } from "react-icons/bi";
+import { FiPlusSquare } from "react-icons/fi";
+import { CgProfile } from "react-icons/cg";
+import { MdLogout } from "react-icons/md";
+import { Navigate } from "react-router-dom";
+
+export default function Sidebar() {
+  const navigate = useNavigate();
+  function handleLogout() {
+    localStorage.removeItem("token");
+    navigate("/login");
+  }
+
+  return (
+    <>
+      <div className="flex flex-col justify-between border-r-2 w-1/6 p-4 gap-5 h-screen bg-white sticky left-0">
+        <div>
+          <h1 className="font-semibold text-3xl font-satisfy text-black mt-4 mb-8">
+            Instgrrrm
+          </h1>
+          <Link to="/">
+            <div className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center">
+              <BiHomeAlt className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
+              <span className="font-bold text-lg group-hover:text-black">
+                Home
+              </span>
+            </div>
+          </Link>
+          <Link to="/">
+            <div className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center">
+              <FiPlusSquare className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
+              <span className="font-bold text-lg group-hover:text-black">
+                Create
+              </span>
+            </div>
+          </Link>
+          <Link to="/profile">
+            <div className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center">
+              <CgProfile className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
+              <span className="font-bold text-lg group-hover:text-black">
+                Profile
+              </span>
+            </div>
+          </Link>
+        </div>
+
+        <div className="mb-4">
+          <div
+            onClick={() => handleLogout()}
+            className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center"
+          >
+            <MdLogout className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
+            <span className="font-bold text-lg group-hover:text-black">
+              Log out
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
