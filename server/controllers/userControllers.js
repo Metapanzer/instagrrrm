@@ -19,7 +19,7 @@ module.exports = {
   register: async (req, res) => {
     const t = await sequelize.transaction();
     try {
-      let { email, fullname, username, password } = req.body; // {}
+      let { email, fullname, username, password } = req.body;
       await users.create(
         {
           email,
@@ -59,8 +59,9 @@ module.exports = {
 
   login: async (req, res) => {
     try {
-      let { emailOrUsername, password } = req.body;
-
+      let { emailOrUsername, password } = req.query;
+      console.log(emailOrUsername);
+      console.log(password);
       let findEmailOrUsername = await users.findOne({
         where: {
           [Op.or]: [{ username: emailOrUsername }, { email: emailOrUsername }],

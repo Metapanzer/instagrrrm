@@ -34,7 +34,7 @@ app.use(cors());
 
 //Import router for controller from index.js inside routers folder
 const { userRouters } = require("./routers"); //refer to index.js in routers folder
-app.use("/", userRouters);
+app.use("/accounts", userRouters);
 
 //Run the API
 app.listen(PORT, () => console.log("API running on Port: " + PORT));

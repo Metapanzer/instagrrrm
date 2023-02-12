@@ -16,15 +16,17 @@ export default function Login() {
   const handleLogin = async (values) => {
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:5000/login", {
-        emailOrUsername: values.emailorusername,
-        password: values.password,
-      });
-      toast.success("Login Success!");
+      const response = await axios.get(
+        `http://localhost:5000/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`
+      );
+      console.log(response);
+      localStorage.setItem("token", response?.data?.data?.token);
+      toast.success(response.data.message);
       setIsLoading(false);
       setTimeout(() => navigate("/"), 3000);
     } catch (error) {
       setIsLoading(false);
+      console.log(error.response.data.message);
       toast.error(error?.response?.data?.message);
     }
   };
@@ -33,14 +35,14 @@ export default function Login() {
   const LoginSchema = Yup.object().shape({
     emailorusername: Yup.string().required("Email or username is required!"),
     password: Yup.string()
-      .min(8, "Password minimum 8 character")
+      .min(8, "Password min 8 character")
       .required("Password is required!"),
   });
 
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="flex flex-col p-2 gap-3 mt-3 w-[347px] h-[397px] border border-slate-300 drop-shadow-md bg-white items-center text-center justify-center">
-        <h1 className="font-bold text-4xl font-['Billabong']">Instgrrrm</h1>
+        <h1 className="font-semibold text-5xl font-satisfy mb-2">Instgrrrm</h1>
         <Formik
           initialValues={{
             emailorusername: "",
