@@ -16,13 +16,13 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike, BiChat } from "react-icons/bi";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function ContentDetails() {
+export default function ContentCard() {
   const [contents, setContents] = useState([]);
-  const location = useLocation();
+  const navigate = useNavigate();
 
-  const getContentDetails = async () => {
+  const getAllContent = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/contents/media/all"
@@ -34,7 +34,7 @@ export default function ContentDetails() {
   };
 
   useEffect(() => {
-    getContentDetails();
+    getAllContent();
   }, []);
 
   return (
@@ -63,7 +63,8 @@ export default function ContentDetails() {
               <Image
                 objectFit="cover"
                 src={`http://localhost:5000/${content.media}`}
-                alt="Chakra UI"
+                alt="content image"
+                onClick={() => navigate(`/content-details/${content.id}`)}
               />
               <CardBody>
                 <Text className="font-bold">

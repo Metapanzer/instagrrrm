@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
 //CORS (granting access from different network (front end to back end))
 const cors = require("cors");
 app.use(cors());
+app.use(express.static("public"));
 
 // ### Sequelize Synchronous
 // const Sequelize = require("sequelize");
@@ -33,8 +34,9 @@ app.use(cors());
 //   });
 
 //Import router for controller from index.js inside routers folder
-const { userRouters } = require("./routers"); //refer to index.js in routers folder
+const { userRouters, contentRouters } = require("./routers"); //refer to index.js in routers folder
 app.use("/accounts", userRouters);
+app.use("/contents", contentRouters);
 
 //Run the API
 app.listen(PORT, () => console.log("API running on Port: " + PORT));

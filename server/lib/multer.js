@@ -4,7 +4,7 @@ const multer = require("multer");
 const fs = require("fs");
 
 // 1. Setup Disk Storage & Filename
-let defaultPath = "Public";
+let defaultPath = "public";
 var storage = multer.diskStorage({
   destination: async (req, file, cb) => {
     console.log(file);
@@ -17,12 +17,9 @@ var storage = multer.diskStorage({
       });
     }
 
-    // To Create 'Public/pdf' or 'Public/images'
-    if (file.fieldname === "files") {
-      cb(null, `${defaultPath}/${file.fieldname}`); // Public/files
-    }
+    // To Create 'Public/images'
     if (file.fieldname === "images") {
-      cb(null, `${defaultPath}/${file.fieldname}`); // Public/images
+      cb(null, `${file.fieldname}`); // /images
     }
   },
   filename: (req, file, cb) => {

@@ -3,14 +3,26 @@ import { BiHomeAlt } from "react-icons/bi";
 import { FiPlusSquare } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
 import { MdLogout } from "react-icons/md";
-import { Navigate } from "react-router-dom";
+import { useState } from "react";
+
+import CreateContentModal from "./createContentModal";
 
 export default function Sidebar() {
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-  function handleLogout() {
-    localStorage.removeItem("token");
+
+  const createContent = async () => {
+    try {
+      setOpenModal(!openModal);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem();
     navigate("/login");
-  }
+  };
 
   return (
     <>
@@ -27,14 +39,17 @@ export default function Sidebar() {
               </span>
             </div>
           </Link>
-          <Link to="/">
-            <div className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center">
-              <FiPlusSquare className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
-              <span className="font-bold text-lg group-hover:text-black">
-                Create
-              </span>
-            </div>
-          </Link>
+
+          <div
+            onClick={() => createContent()}
+            className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center"
+          >
+            <FiPlusSquare className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
+            <span className="font-bold text-lg group-hover:text-black">
+              Create
+            </span>
+          </div>
+          {openModal ? <CreateContentModal /> : <></>}
           <Link to="/profile">
             <div className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center">
               <CgProfile className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />

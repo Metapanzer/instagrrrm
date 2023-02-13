@@ -60,8 +60,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       let { emailOrUsername, password } = req.query;
-      console.log(emailOrUsername);
-      console.log(password);
+
       let findEmailOrUsername = await users.findOne({
         where: {
           [Op.or]: [{ username: emailOrUsername }, { email: emailOrUsername }],
@@ -86,13 +85,43 @@ module.exports = {
           message: "Incorrect password",
           data: true,
         });
-
       res.status(200).send({
         isError: false,
         message: "Login Success",
         data: {
           token: createToken({ id: findEmailOrUsername.dataValues.id }),
+          user: {
+            id: findEmailOrUsername.dataValues.id,
+            username: findEmailOrUsername.dataValues.username,
+            email: findEmailOrUsername.dataValues.email,
+            fullname: findEmailOrUsername.dataValues.fullname,
+            profile_picture: findEmailOrUsername.dataValues.profile_picture,
+            bio: findEmailOrUsername.dataValues.bio,
+            is_verified: findEmailOrUsername.dataValues.is_verified,
+          },
         },
+      });
+    } catch (error) {
+      res.status(500).send({
+        isError: true,
+        message: error.message,
+        data: true,
+      });
+    }
+  },
+  getProfile: async (req, res) => {
+    try {
+      let users_id = req.params.id;
+
+      let response = await users.findOne({
+        where: {
+          id: users_id,
+        },
+      });
+      res.status(201).send({
+        isError: false,
+        message: "Get Profile Success",
+        data: response,
       });
     } catch (error) {
       res.status(500).send({

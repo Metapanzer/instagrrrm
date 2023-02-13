@@ -1,21 +1,21 @@
 // Import Multer
-const { multerUpload } = require("./../lib/multer");
+const { multerUpload } = require("../lib/multer");
 
 // Import DeleteFiles
-const deleteFiles = require("./../helpers/deleteFiles");
+const deleteFiles = require("../helpers/deleteFiles");
 
 const uploadImages = (req, res, next) => {
-  const multerResult = multerUpload.fields([{ name: "images", maxCount: 3 }]);
+  const multerResult = multerUpload.fields([{ name: "images", maxCount: 1 }]);
   multerResult(req, res, function (err) {
     try {
       if (err) throw err;
 
-      req.files.images.forEach((value) => {
-        if (value.size > 100000)
-          throw {
-            message: `${value.originalname} size too large`,
-          };
-      });
+      // req.files.images.forEach((value) => {
+      //   if (value.size > 10000000)
+      //     throw {
+      //       message: `${value.originalname} size too large`,
+      //     };
+      // });
 
       next();
     } catch (error) {

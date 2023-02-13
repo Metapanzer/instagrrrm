@@ -1,6 +1,6 @@
 //Import dependencies
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -14,6 +14,12 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const isAuth = async () => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  };
 
   const handleRegister = async (values) => {
     try {
@@ -32,6 +38,10 @@ export default function Register() {
       toast.error(error?.response?.data?.message);
     }
   };
+
+  useEffect(() => {
+    isAuth();
+  }, []);
 
   //Validasi Formik/yup
   const RegisterSchema = Yup.object().shape({
