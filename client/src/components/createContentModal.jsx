@@ -54,7 +54,7 @@ export default function CreateContentModal({ email }) {
       if (error?.response?.data?.message === "You session has been expired.") {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/login");
+        setTimeout(navigate("/login"), 2000);
       }
       toast.error(error?.response?.data?.message);
     }

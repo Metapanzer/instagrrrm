@@ -29,7 +29,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route
-          path="/content-details/:content_id"
+          path="/content-details/:contents_id"
           element={<ContentDetails />}
         />
       </Routes>

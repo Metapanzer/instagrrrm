@@ -27,8 +27,8 @@ export default function Sidebar() {
   return (
     <>
       <div className="flex flex-col justify-between border-r-2 w-1/6 p-4 gap-5 h-screen bg-white sticky left-0">
-        <div>
-          <h1 className="font-semibold text-3xl font-satisfy text-black mt-4 mb-8">
+        <div className="flex flex-wrap">
+          <h1 className="font-semibold md:text-3xl text-sm font-satisfy text-black mt-4 mb-8">
             Instgrrrm
           </h1>
           <Link to="/">
@@ -49,7 +49,6 @@ export default function Sidebar() {
               Create
             </span>
           </div>
-          {openModal ? <CreateContentModal /> : <></>}
           <Link to="/profile">
             <div className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center">
               <CgProfile className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
@@ -71,6 +70,7 @@ export default function Sidebar() {
             </span>
           </div>
         </div>
+        {openModal ? <CreateContentModal /> : <></>}
       </div>
     </>
   );

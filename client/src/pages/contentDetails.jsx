@@ -16,32 +16,71 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike, BiChat } from "react-icons/bi";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function ContentDetails() {
   const [contents, setContents] = useState([]);
-  const location = useLocation();
+  const [comments, setComments] = useState([]);
+  const [commentBody, setCommentBody] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const isAuth = async () => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  };
 
   const getContentDetails = async () => {
     try {
+      const { contents_id } = params;
       const response = await axios.get(
-        "http://localhost:5000/contents/media/all"
+        `http://localhost:5000/contents/media/content-details/${contents_id}`
       );
-      setContents(response.data.data);
+      setContents(response.data?.data);
+      setComments(response.data?.comment);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const submitComment = async (value) => {
+    try {
+      setIsLoading(true);
+      const { contents_id } = params;
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `http://localhost:5000/contents/media/comment/${contents_id}`,
+        value,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      toast.error(error.response?.data?.message);
+      if (error?.response?.data?.message === "You session has been expired.") {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setTimeout(navigate("/login"), 2000);
+      }
+    }
+  };
+
   useEffect(() => {
+    isAuth();
     getContentDetails();
   }, []);
 
   return (
-    <div>
+    <div className="w-screen flex flex-col items-center">
       {contents.map((content, index) => {
         return (
-          <>
+          <div key={index} className="">
             <Card key={index} maxW="md" className="mb-8">
               <CardHeader>
                 <Flex spacing="4">
@@ -92,9 +131,45 @@ export default function ContentDetails() {
                 </Button>
               </CardFooter>
             </Card>
-          </>
+          </div>
         );
       })}
+      <div className="self-start pl-2 pb-4 w-full">
+        {comments.map((comment, index) => {
+          return (
+            <div key={index} className="">
+              <Text className="font-bold">
+                {comment.user.username}
+                <span className="font-normal ml-3">{comment.comment_body}</span>
+              </Text>
+              <Text className="text-sm text-slate-400">
+                {comment.createdAt.slice(0, 10)}
+              </Text>
+            </div>
+          );
+        })}
+        <div className="flex justify-between mr-2 mt-2">
+          <input
+            type="text"
+            name="comment"
+            id="comment"
+            placeholder="Add a comment here..."
+            onChange={(event) => setCommentBody(event.target.value)}
+            className="w-11/12 pl-2"
+          />
+          <Button
+            isLoading={isLoading}
+            loadingText="Submitting"
+            type="submit"
+            id="comment"
+            onClick={() => submitComment(commentBody)}
+            className="text-blue-400 font-bold mr-4 m-2"
+          >
+            Post
+          </Button>
+        </div>
+      </div>
+      <Toaster />
     </div>
   );
 }

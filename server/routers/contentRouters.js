@@ -12,6 +12,11 @@ Router.post(
   uploadImages,
   contentControllers.createPost
 );
+Router.post(
+  "/media/comment/:contents_id",
+  verifyToken,
+  contentControllers.createComment
+);
 Router.get("/media/all", contentControllers.allContent);
 Router.get("/media/content-details/:id", contentControllers.contentDetails);
 

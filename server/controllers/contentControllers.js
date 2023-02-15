@@ -71,15 +71,14 @@ module.exports = {
   },
   contentDetails: async (req, res) => {
     try {
-      let id = req.params.id;
+      let contents_id = req.params.id;
       let detail = await sequelize.query(
-        `SELECT contents.*, users.username FROM contents JOIN users ON contents.users_id = users.id WHERE contents.id = ${id};`
+        `SELECT contents.*, users.username FROM contents JOIN users ON contents.users_id = users.id WHERE contents.id = ${contents_id};`
       );
 
       let comment = await comments.findAll({
-        where: {
-          contents_id: id,
-        },
+        where: { contents_id },
+        include: { model: users, attributes: ["username"] },
       });
 
       res.status(200).send({
@@ -92,7 +91,7 @@ module.exports = {
       res.status(500).send({
         isError: true,
         message: error.message,
-        data: true,
+        data: null,
       });
     }
   },
@@ -100,8 +99,8 @@ module.exports = {
     const t = await sequelize.transaction();
     try {
       let users_id = req.dataDecode?.id;
-      let contents_id = req.params;
-      let comment_body = req.body;
+      let { contents_id } = req.params;
+      let { comment_body } = req.body;
 
       await comments.create(
         {
@@ -111,11 +110,21 @@ module.exports = {
         },
         { transaction: t }
       );
+      //still buggy
+      await contents.update(
+        { like: sequelize.literal("like + 1") },
+        {
+          where: {
+            id: contents_id,
+          },
+        },
+        { transaction: t }
+      );
 
       t.commit();
       res.status(201).send({
         isError: false,
-        message: "Upload Success!",
+        message: "Comment Success!",
         data: null,
       });
     } catch (error) {
