@@ -32,7 +32,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-screen flex items-center overflow-auto ">
+    <div className="w-5/6 flex items-center overflow-auto ">
       <div className="flex flex-col items-center justify-between p-4 gap-5 bg-white w-3/5 h-screen">
         <ContentCard />
       </div>

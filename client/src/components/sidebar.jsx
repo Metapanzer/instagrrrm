@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BiHomeAlt } from "react-icons/bi";
 import { FiPlusSquare } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
@@ -18,6 +18,9 @@ export default function Sidebar() {
       console.log(error);
     }
   };
+  const closeModal = () => {
+    setOpenModal(false);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem();
@@ -31,14 +34,17 @@ export default function Sidebar() {
           <h1 className="font-semibold md:text-3xl text-sm font-satisfy text-black mt-4 mb-8">
             Instgrrrm
           </h1>
-          <Link to="/">
-            <div className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center">
-              <BiHomeAlt className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
-              <span className="font-bold text-lg group-hover:text-black">
-                Home
-              </span>
-            </div>
-          </Link>
+          <div
+            onClick={() => {
+              navigate("/");
+            }}
+            className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center"
+          >
+            <BiHomeAlt className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
+            <span className="font-bold text-lg group-hover:text-black">
+              Home
+            </span>
+          </div>
 
           <div
             onClick={() => createContent()}
@@ -49,14 +55,18 @@ export default function Sidebar() {
               Create
             </span>
           </div>
-          <Link to="/profile">
-            <div className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center">
-              <CgProfile className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
-              <span className="font-bold text-lg group-hover:text-black">
-                Profile
-              </span>
-            </div>
-          </Link>
+
+          <div
+            onClick={() => {
+              navigate("/profile");
+            }}
+            className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center"
+          >
+            <CgProfile className="h-8 w-8 group-hover:w-9 group-hover:h-9 text-black group-hover:text-black mr-4" />
+            <span className="font-bold text-lg group-hover:text-black">
+              Profile
+            </span>
+          </div>
         </div>
 
         <div className="mb-4">
@@ -70,7 +80,7 @@ export default function Sidebar() {
             </span>
           </div>
         </div>
-        {openModal ? <CreateContentModal /> : <></>}
+        {openModal ? <CreateContentModal onExit={closeModal} /> : <></>}
       </div>
     </>
   );

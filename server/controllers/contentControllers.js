@@ -110,16 +110,6 @@ module.exports = {
         },
         { transaction: t }
       );
-      //still buggy
-      await contents.update(
-        { like: sequelize.literal("like + 1") },
-        {
-          where: {
-            id: contents_id,
-          },
-        },
-        { transaction: t }
-      );
 
       t.commit();
       res.status(201).send({
@@ -130,6 +120,26 @@ module.exports = {
     } catch (error) {
       t.rollback();
       res.status(409).send({
+        isError: true,
+        message: error.message,
+        data: null,
+      });
+    }
+  },
+  addLike: async (req, res) => {
+    try {
+      let { contents_id } = req.params;
+
+      await contents.increment("like", { by: 1, where: { id: contents_id } });
+
+      res.status(200).send({
+        isError: false,
+        message: "Liked!",
+        data: null,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
         isError: true,
         message: error.message,
         data: null,

@@ -16,11 +16,13 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike, BiChat } from "react-icons/bi";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function ContentCard() {
   const [contents, setContents] = useState([]);
   const navigate = useNavigate();
+  const params = useParams();
 
   const getAllContent = async () => {
     try {
@@ -28,6 +30,19 @@ export default function ContentCard() {
         "http://localhost:5000/contents/media/all"
       );
       setContents(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addLike = async () => {
+    try {
+      const { contents_id } = params;
+      await axios.patch(
+        `http://localhost:5000/contents/media/like/${contents_id}`
+      );
+      getAllContent();
+      toast.success("Liked!");
     } catch (error) {
       console.log(error);
     }
@@ -85,7 +100,12 @@ export default function ContentCard() {
                   },
                 }}
               >
-                <Button flex="1" variant="ghost" leftIcon={<BiLike />}>
+                <Button
+                  onClick={() => addLike()}
+                  flex="1"
+                  variant="ghost"
+                  leftIcon={<BiLike />}
+                >
                   Like ({content.like})
                 </Button>
                 <Button flex="1" variant="ghost" leftIcon={<BiChat />}>
@@ -96,6 +116,7 @@ export default function ContentCard() {
           </>
         );
       })}
+      <Toaster />
     </div>
   );
 }

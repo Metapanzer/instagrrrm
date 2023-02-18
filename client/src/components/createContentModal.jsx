@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateContentModal({ email }) {
+export default function CreateContentModal({ onExit }) {
   const [media, setMedia] = useState(null);
   const [caption, setCaption] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -79,7 +79,7 @@ export default function CreateContentModal({ email }) {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onExit}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Create Content</ModalHeader>
@@ -170,7 +170,7 @@ export default function CreateContentModal({ email }) {
             </Formik> */}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="blue" mr={3} onClick={onExit}>
               Close
             </Button>
           </ModalFooter>

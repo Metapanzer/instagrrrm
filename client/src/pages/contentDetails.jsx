@@ -71,6 +71,19 @@ export default function ContentDetails() {
     }
   };
 
+  const addLike = async () => {
+    try {
+      const { contents_id } = params;
+      await axios.patch(
+        `http://localhost:5000/contents/media/like/${contents_id}`
+      );
+      getContentDetails();
+      toast.success("Liked!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     isAuth();
     getContentDetails();
@@ -123,7 +136,14 @@ export default function ContentDetails() {
                   },
                 }}
               >
-                <Button flex="1" variant="ghost" leftIcon={<BiLike />}>
+                <Button
+                  onClick={() => {
+                    addLike();
+                  }}
+                  flex="1"
+                  variant="ghost"
+                  leftIcon={<BiLike />}
+                >
                   Like ({content.like})
                 </Button>
                 <Button flex="1" variant="ghost" leftIcon={<BiChat />}>
