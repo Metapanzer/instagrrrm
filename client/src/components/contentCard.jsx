@@ -35,9 +35,8 @@ export default function ContentCard() {
     }
   };
 
-  const addLike = async () => {
+  const addLike = async (contents_id) => {
     try {
-      const { contents_id } = params;
       await axios.patch(
         `http://localhost:5000/contents/media/like/${contents_id}`
       );
@@ -56,14 +55,20 @@ export default function ContentCard() {
     <div>
       {contents.map((content, index) => {
         return (
-          <>
-            <Card key={index} maxW="md" className="mb-8">
+          <div key={index}>
+            <Card maxW="md" className="mb-8">
               <CardHeader>
                 <Flex spacing="4">
                   <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-                    <Avatar name={content.username} src="/images/default.png" />
-
-                    <Box>
+                    <Avatar
+                      onClick={() => navigate(`/profile/${content.username}`)}
+                      name={content.username}
+                      src="/images/default.png"
+                    />
+                    <Box
+                      onClick={() => navigate(`/profile/${content.username}`)}
+                      className="active:text-slate-400"
+                    >
                       <Heading size="sm">{content.username}</Heading>
                     </Box>
                   </Flex>
@@ -101,7 +106,7 @@ export default function ContentCard() {
                 }}
               >
                 <Button
-                  onClick={() => addLike()}
+                  onClick={() => addLike(content.id)}
                   flex="1"
                   variant="ghost"
                   leftIcon={<BiLike />}
@@ -113,7 +118,7 @@ export default function ContentCard() {
                 </Button>
               </CardFooter>
             </Card>
-          </>
+          </div>
         );
       })}
       <Toaster />

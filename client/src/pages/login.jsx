@@ -23,7 +23,8 @@ export default function Login() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`
+        `${process.env.REACT_APP_API}/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`
+        /*`http://localhost:5000/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`*/
       );
       console.log(response);
       localStorage.setItem("token", response?.data?.data?.token);
@@ -33,6 +34,7 @@ export default function Login() {
       setTimeout(() => navigate("/"), 2000);
     } catch (error) {
       setIsLoading(false);
+      console.log(error);
       toast.error(error?.response?.data?.message);
     }
   };

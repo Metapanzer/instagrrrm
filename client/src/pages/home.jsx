@@ -38,9 +38,18 @@ export default function Home() {
       </div>
       <div className="flex flex-col justify-between p-4 gap-5 bg-white w-2/5 h-screen">
         <div className="flex items-center mt-4">
-          <Avatar name={profile.username} src="/public/images/default.jpg" />
+          <Avatar
+            onClick={() => navigate(`/profile/${profile.username}`)}
+            name={profile.username}
+            src="/public/images/default.jpg"
+          />
           <div className="flex flex-col">
-            <span className="font-bold ml-3">{profile.username}</span>
+            <span
+              onClick={() => navigate(`/profile/${profile.username}`)}
+              className="font-bold ml-3 active:text-slate-400"
+            >
+              {profile.username}
+            </span>
             <span className="font-normal ml-3">{profile.fullname}</span>
           </div>
         </div>

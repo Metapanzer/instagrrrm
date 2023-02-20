@@ -4,6 +4,7 @@ import { FiPlusSquare } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
 import { MdLogout } from "react-icons/md";
 import { useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 
 import CreateContentModal from "./createContentModal";
 
@@ -23,7 +24,8 @@ export default function Sidebar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem();
+    localStorage.clear();
+    toast.success("Logged out!");
     navigate("/login");
   };
 
@@ -81,6 +83,7 @@ export default function Sidebar() {
           </div>
         </div>
         {openModal ? <CreateContentModal onExit={closeModal} /> : <></>}
+        <Toaster />
       </div>
     </>
   );
