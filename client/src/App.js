@@ -7,6 +7,7 @@ import Register from "./pages/register";
 import Login from "./pages/login";
 import Verification from "./pages/verification";
 import Profile from "./pages/profile";
+import EditProfile from "./pages/editProfile";
 import ResetPassword from "./pages/resetPassword";
 import ContentDetails from "./pages/contentDetails";
 import Sidebar from "./components/sidebar";
@@ -17,8 +18,8 @@ function App() {
   return (
     <div className="flex justify-start">
       {location.pathname === "/" ||
-      location.pathname === "/profile" ||
-      location.pathname === "/content-details" ? (
+      location.pathname.startsWith("/profile") ||
+      location.pathname.startsWith("/content-details") ? (
         <Sidebar />
       ) : null}
       <Routes>
@@ -26,7 +27,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/verification" element={<Verification />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/content-details/:contents_id"

@@ -7,9 +7,9 @@ const app = express();
 app.use(express.json());
 
 //Define PORT and response for default route
-const PORT = process.env.DATABASE_PORT;
+const PORT = process.env.DB_PORT;
 app.get("/", (req, res) => {
-  res.status(201).send("<h1>Welcome to instagram<h1>");
+  res.status(201).send("<h1>Welcome to instagrrrm<h1>");
 });
 
 //CORS (granting access from different network (front end to back end))

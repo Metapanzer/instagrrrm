@@ -16,11 +16,11 @@ export default function Home() {
 
   const getProfile = async () => {
     try {
-      const token = JSON.parse(localStorage.getItem("user")).id;
+      const username = JSON.parse(localStorage.getItem("user")).username;
       const response = await axios.get(
-        `http://localhost:5000/accounts/profile/${token}`
+        `http://localhost:5000/accounts/profile/${username}`
       );
-      setProfile(response?.data?.data);
+      setProfile(response?.data?.data?.user);
     } catch (error) {
       console.log(error);
     }
@@ -32,7 +32,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-5/6 flex items-center overflow-auto ">
+    <div className="w-5/6 flex items-center overflow-auto">
       <div className="flex flex-col items-center justify-between p-4 gap-5 bg-white w-3/5 h-screen">
         <ContentCard />
       </div>

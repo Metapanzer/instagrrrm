@@ -18,6 +18,7 @@ Router.post(
   contentControllers.createComment
 );
 Router.get("/media/all", contentControllers.allContent);
+Router.get("/:id", contentControllers.userContent);
 Router.patch("/media/like/:contents_id", contentControllers.addLike);
 Router.get("/media/content-details/:id", contentControllers.contentDetails);
 

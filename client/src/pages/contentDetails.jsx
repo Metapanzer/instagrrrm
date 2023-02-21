@@ -90,7 +90,7 @@ export default function ContentDetails() {
   }, []);
 
   return (
-    <div className="w-screen flex flex-col items-center">
+    <div className="w-5/6 h-screen flex flex-col items-center overflow-auto">
       {contents.map((content, index) => {
         return (
           <div key={index} className="">
@@ -98,10 +98,19 @@ export default function ContentDetails() {
               <CardHeader>
                 <Flex spacing="4">
                   <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-                    <Avatar name={content.username} src="/images/default.png" />
+                    <Avatar
+                      onClick={() => navigate(`/profile/${content.username}`)}
+                      name={content.username}
+                      src="/images/default.png"
+                    />
 
                     <Box>
-                      <Heading size="sm">{content.username}</Heading>
+                      <Heading
+                        onClick={() => navigate(`/profile/${content.username}`)}
+                        size="sm"
+                      >
+                        {content.username}
+                      </Heading>
                     </Box>
                   </Flex>
                   <IconButton

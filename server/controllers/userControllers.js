@@ -5,6 +5,7 @@ const { Op } = require("sequelize");
 // Import models
 const db = require("./../models/index");
 const users = db.users;
+const contents = db.contents;
 
 // Import hashing
 const { hashPassword, hashMatch } = require("./../lib/hash");
@@ -111,17 +112,37 @@ module.exports = {
   },
   getProfile: async (req, res) => {
     try {
-      let users_id = req.params.id;
+      const username = req.params.username;
 
-      let response = await users.findOne({
+      const response = await users.findOne({
         where: {
-          id: users_id,
+          username,
         },
       });
+
+      const users_id = response.id;
+
+      const { count } = await contents.findAndCountAll({
+        where: {
+          users_id,
+        },
+      });
+
       res.status(201).send({
         isError: false,
         message: "Get Profile Success",
-        data: response,
+        data: {
+          user: {
+            id: response.id,
+            username: response.username,
+            email: response.email,
+            fullname: response.fullname,
+            profile_picture: response.profile_picture,
+            bio: response.bio,
+            is_verified: response.is_verified,
+            posts: count,
+          },
+        },
       });
     } catch (error) {
       res.status(500).send({

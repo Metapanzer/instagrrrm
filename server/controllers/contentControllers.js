@@ -69,6 +69,28 @@ module.exports = {
       });
     }
   },
+  userContent: async (req, res) => {
+    try {
+      const users_id = req.params.id;
+
+      let response = await contents.findAll({
+        where: { users_id },
+        // include: { model: users, attributes: ["username"] },
+      });
+
+      res.status(200).send({
+        isError: false,
+        message: "Get User Contents",
+        data: response,
+      });
+    } catch (error) {
+      res.status(500).send({
+        isError: true,
+        message: error.message,
+        data: null,
+      });
+    }
+  },
   contentDetails: async (req, res) => {
     try {
       let contents_id = req.params.id;

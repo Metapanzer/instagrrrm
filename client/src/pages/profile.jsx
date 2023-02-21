@@ -1,44 +1,89 @@
 import axios from "axios";
 import { Avatar, Button } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function Profile() {
-  const getProfile = () => {
+  const [contents, setContents] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const getProfile = async () => {
     try {
+      const username = params.username;
+      const response = await axios.get(
+        `http://localhost:5000/accounts/profile/${username}`
+      );
+      setUserData(response?.data?.data?.user);
+      getUserContent(response?.data?.data?.user?.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserContent = async (users_id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/contents/${users_id}`
+      );
+      setContents(response?.data?.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    // getProfile()
+    getProfile();
   }, []);
 
   return (
-    <div className="w-screen flex flex-col items-center">
-      <div className="flex w-3/5 flex-row gap-28 p-4">
+    <div className="w-5/6 flex flex-col items-center h-screen overflow-auto">
+      <div className="flex w-4/6 flex-row justify-center gap-28 p-4">
         <div>
           <Avatar
             size="2xl"
-            name="Segun Adebayo"
-            src="https://bit.ly/sage-adebayo"
+            name={userData.fullname}
+            src={
+              userData.profile_picture
+                ? `http://localhost:5000/${userData.profile_picture}`
+                : undefined
+            }
             className="w-36 h-36"
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
           <div className="flex gap-4 items-center">
-            <span>Baltheon</span>
-            <Button>Edit profile</Button>
+            <span className="font-semibold">{userData.username}</span>
+            <Button onClick={() => navigate("/profile/edit")}>
+              Edit profile
+            </Button>
           </div>
-          <div>80 Posts</div>
           <div>
-            <p>Krisna Sandy Pribadi</p>
-            <p>"Action speaks louder, so I become a fighter"</p>
+            <span className="font-semibold">{userData.posts}</span> Posts
+          </div>
+          <div>
+            <p className="font-semibold">{userData.fullname}</p>
+            <p>{userData.bio}</p>
           </div>
         </div>
       </div>
-      <hr className="border-1 border-slate-400 w-3/5 " />
-      <div className="w-3/5 grid grid-cols-3 gap-4">Div 2</div>
+      <hr className="border-1 border-slate-400 w-4/6 mt-8 mb-8" />
+      <div className="w-4/6 grid grid-cols-3 justify-items-center gap-4 mb-8">
+        {contents.map((content, index) => {
+          return (
+            <img
+              onClick={() => navigate(`/content-details/${content.id}`)}
+              key={index}
+              src={
+                contents ? `http://localhost:5000/${content.media}` : undefined
+              }
+              alt={content.id}
+              className="w-64 h-64"
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
