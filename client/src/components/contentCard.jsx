@@ -16,20 +16,19 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike, BiChat } from "react-icons/bi";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 
 export default function ContentCard() {
   const [contents, setContents] = useState([]);
   const navigate = useNavigate();
-  const params = useParams();
 
   const getAllContent = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/contents/media/all"
       );
-      setContents(response.data.data);
+      setContents(response.data.data.reverse());
     } catch (error) {
       console.log(error);
     }

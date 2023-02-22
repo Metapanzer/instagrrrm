@@ -17,9 +17,9 @@ var storage = multer.diskStorage({
       });
     }
 
-    // To Create 'Public/images'
+    // To Create 'public/images'
     if (file.fieldname === "images") {
-      cb(null, `${file.fieldname}`); // /images
+      cb(null, `${defaultPath}/${file.fieldname}`); // /images
     }
   },
   filename: (req, file, cb) => {

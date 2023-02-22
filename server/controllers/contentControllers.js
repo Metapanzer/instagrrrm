@@ -22,8 +22,8 @@ module.exports = {
     const t = await sequelize.transaction();
     try {
       let users_id = req.dataDecode?.id;
-      let caption = req.body.caption;
-      let media = req.files.images[0].path;
+      let caption = req.body?.caption;
+      let media = req.files?.images[0]?.path.replace("public\\", "");
 
       await contents.create(
         {
@@ -41,8 +41,9 @@ module.exports = {
         data: null,
       });
     } catch (error) {
+      console.log(error);
       t.rollback();
-      res.status(409).send({
+      res.status(500).send({
         isError: true,
         message: error.message,
         data: null,

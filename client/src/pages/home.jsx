@@ -41,7 +41,11 @@ export default function Home() {
           <Avatar
             onClick={() => navigate(`/profile/${profile.username}`)}
             name={profile.username}
-            src="/public/images/default.jpg"
+            src={
+              profile.profile_picture
+                ? `http://localhost:5000/${profile.profile_picture}`
+                : null
+            }
           />
           <div className="flex flex-col">
             <span
