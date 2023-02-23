@@ -27,7 +27,7 @@ export default function Profile() {
       const response = await axios.get(
         `http://localhost:5000/contents/${users_id}`
       );
-      setContents(response?.data?.data);
+      setContents(response?.data?.data.reverse());
     } catch (error) {
       console.log(error);
     }
@@ -43,7 +43,9 @@ export default function Profile() {
         <div>
           <Avatar
             size="2xl"
-            name={userData.fullname}
+            name={userData.username}
+            showBorder="true"
+            borderColor="blue.500"
             src={
               userData.profile_picture
                 ? `http://localhost:5000/${userData.profile_picture}`

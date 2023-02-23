@@ -21,6 +21,7 @@ import { Toaster, toast } from "react-hot-toast";
 
 export default function ContentCard() {
   const [contents, setContents] = useState([]);
+  const [profile, setProfile] = useState([]);
   const navigate = useNavigate();
 
   const getAllContent = async () => {
@@ -46,8 +47,21 @@ export default function ContentCard() {
     }
   };
 
+  const getProfile = async () => {
+    try {
+      const username = JSON.parse(localStorage.getItem("user")).username;
+      const response = await axios.get(
+        `http://localhost:5000/accounts/profile/${username}`
+      );
+      setProfile(response?.data?.data?.user);
+      getAllContent();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getAllContent();
+    getProfile();
   }, []);
 
   return (
@@ -62,7 +76,13 @@ export default function ContentCard() {
                     <Avatar
                       onClick={() => navigate(`/profile/${content.username}`)}
                       name={content.username}
-                      src="/images/default.png"
+                      showBorder="true"
+                      borderColor="blue.500"
+                      src={
+                        profile.profile_picture
+                          ? `http://localhost:5000/${profile.profile_picture}`
+                          : null
+                      }
                     />
                     <Box
                       onClick={() => navigate(`/profile/${content.username}`)}

@@ -10,19 +10,22 @@ const comments = db.comments;
 
 // Import hashing
 const { hashPassword, hashMatch } = require("./../lib/hash");
+// Import deleteFiles helpers
+const deleteFiles = require("./../helpers/deleteFiles");
 
 // Import jwt
 const { createToken } = require("./../lib/jwt");
 const transporter = require("./../helpers/transporter");
 const fs = require("fs").promises;
 const handlebars = require("handlebars");
+const { error } = require("console");
 
 module.exports = {
   createPost: async (req, res) => {
     const t = await sequelize.transaction();
     try {
-      let users_id = req.dataDecode?.id;
-      let caption = req.body?.caption;
+      const users_id = req.dataDecode?.id;
+      const caption = req.body?.caption;
       let media = req.files?.images[0]?.path.replace("public\\", "");
 
       await contents.create(
@@ -42,6 +45,7 @@ module.exports = {
       });
     } catch (error) {
       console.log(error);
+      deleteFiles(req.files.images);
       t.rollback();
       res.status(500).send({
         isError: true,

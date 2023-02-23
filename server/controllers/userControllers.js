@@ -1,14 +1,16 @@
 // Import Sequelize
 const { sequelize } = require("./../models");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 // Import models
 const db = require("./../models/index");
 const users = db.users;
 const contents = db.contents;
 
-// Import hashing
+// Import hash function
 const { hashPassword, hashMatch } = require("./../lib/hash");
+// Import deleteFiles helpers
+const deleteFiles = require("./../helpers/deleteFiles");
 
 // Import jwt
 const { createToken } = require("./../lib/jwt");
@@ -33,6 +35,7 @@ module.exports = {
 
       let template = await fs.readFile("./template/verification.html", "utf-8");
       let compiledTemplate = await handlebars.compile(template);
+      //TODO: add token for email verification
       let newTemplate = compiledTemplate({
         fullname: fullname,
       });
@@ -149,6 +152,37 @@ module.exports = {
         isError: true,
         message: error.message,
         data: true,
+      });
+    }
+  },
+  changePicture: async (req, res) => {
+    const t = await sequelize.transaction();
+    try {
+      const id = req.dataDecode?.id;
+      let profile_picture = req.files?.images[0]?.path.replace("public\\", "");
+
+      await users.update(
+        {
+          profile_picture,
+        },
+        { where: { id } },
+        { transaction: t }
+      );
+
+      t.commit();
+      res.status(201).send({
+        isError: false,
+        message: "Upload Success!",
+        data: null,
+      });
+    } catch (error) {
+      console.log(error);
+      deleteFiles(req.files.images);
+      t.rollback();
+      res.status(500).send({
+        isError: true,
+        message: error.message,
+        data: null,
       });
     }
   },

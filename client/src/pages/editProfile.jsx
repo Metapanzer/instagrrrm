@@ -6,6 +6,7 @@ import axios from "axios";
 import { Button, Avatar } from "@chakra-ui/react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast, Toaster } from "react-hot-toast";
+import ProfilePictureModal from "../components/profilePictureModal";
 
 export default function EditProfile() {
   const [profile, setProfile] = useState([]);
@@ -14,6 +15,7 @@ export default function EditProfile() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
   const isAuth = async () => {
@@ -47,6 +49,11 @@ export default function EditProfile() {
     }
   };
 
+  const closeModal = () => {
+    setOpenModal(false);
+    getProfile();
+  };
+  //TODO create edit profile and edit password function
   const editProfile = async (values) => {
     try {
       console.log(values);
@@ -110,18 +117,25 @@ export default function EditProfile() {
           <Avatar
             onClick={() => navigate(`/profile/${profile.username}`)}
             name={profile.username}
-            src={`http://localhost:5000/${profile.profile_picture}`}
+            showBorder="true"
+            borderColor="blue.500"
+            src={
+              profile.profile_picture
+                ? `http://localhost:5000/${profile.profile_picture}`
+                : null
+            }
           />
           <div className="flex flex-col">
             <span className="font-bold ml-3 active:text-slate-400">
               {profile.username}
             </span>
             <span
-              // onClick={() => navigate("/register")}
+              onClick={() => setOpenModal(true)}
               className="text-blue-400 active:text-blue-200 ml-3"
             >
               Change profile photo
             </span>
+            {openModal ? <ProfilePictureModal onExit={closeModal} /> : <></>}
           </div>
         </div>
         <Formik
@@ -161,6 +175,7 @@ export default function EditProfile() {
                     Username
                   </label>
                   <Field
+                    // onBlur={(event)=>checkUsername(event.target.value)}
                     type="text"
                     name="username"
                     id="username"

@@ -60,7 +60,9 @@ export default function Sidebar() {
 
           <div
             onClick={() => {
-              navigate("/profile");
+              navigate(
+                `/profile/${JSON.parse(localStorage.getItem("user")).username}`
+              );
             }}
             className="group hover:bg-slate-200 rounded-full flex p-1 mb-4 w-full h-fit items-center"
           >

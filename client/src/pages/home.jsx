@@ -41,6 +41,8 @@ export default function Home() {
           <Avatar
             onClick={() => navigate(`/profile/${profile.username}`)}
             name={profile.username}
+            showBorder="true"
+            borderColor="blue.500"
             src={
               profile.profile_picture
                 ? `http://localhost:5000/${profile.profile_picture}`

@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateContentModal({ onExit }) {
+export default function ProfilePictureModal({ onExit }) {
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen } = useDisclosure();
   const navigate = useNavigate();
@@ -28,14 +28,12 @@ export default function CreateContentModal({ onExit }) {
   const handleSubmit = async (values) => {
     try {
       setIsLoading(true);
-      let users_id = JSON.parse(localStorage.getItem("user"))?.id;
       let token = localStorage.getItem("token");
       console.log(values);
       let formData = new FormData();
-      formData.append("images", values.media);
-      formData.append("caption", values.caption);
-      await axios.post(
-        `http://localhost:5000/contents/media/${users_id}`,
+      formData.append("images", values.profile_picture);
+      await axios.patch(
+        `http://localhost:5000/accounts/edit/picture`,
         formData,
         {
           headers: { Authorization: token },
@@ -56,17 +54,10 @@ export default function CreateContentModal({ onExit }) {
     }
   };
 
-  //Validasi Formik/yup
-  // const ContentSchema = Yup.object().shape({
-  //   media: Yup.mixed(),
-  //   caption: Yup.string(),
-  // });
-
   //Make input useformik
   const formik = useFormik({
     initialValues: {
-      media: "",
-      caption: "",
+      profile_picture: "",
     },
     onSubmit: (values) => {
       handleSubmit(values);
@@ -78,7 +69,7 @@ export default function CreateContentModal({ onExit }) {
       <Modal isOpen={isOpen} onClose={onExit}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create Content</ModalHeader>
+          <ModalHeader>Change profile picture</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
@@ -89,19 +80,12 @@ export default function CreateContentModal({ onExit }) {
                 accept="image/*"
                 required
                 onChange={(e) =>
-                  formik.setFieldValue("media", e.currentTarget.files[0])
+                  formik.setFieldValue(
+                    "profile_picture",
+                    e.currentTarget.files[0]
+                  )
                 }
                 className="mt-2"
-              />
-
-              <input
-                type="text"
-                name="caption"
-                onChange={formik.handleChange}
-                value={formik.values.name}
-                placeholder="Type a caption here..."
-                maxLength={200}
-                className="border border-slate-300 bg-slate-100 rounded-sm h-9 w-full mt-3 p-2"
               />
 
               <Button
@@ -111,7 +95,7 @@ export default function CreateContentModal({ onExit }) {
                 type="submit"
                 className="w-full mb-3 mt-5"
               >
-                Publish
+                Save profile picture
               </Button>
             </form>
           </ModalBody>
