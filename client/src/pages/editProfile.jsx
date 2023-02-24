@@ -21,6 +21,8 @@ export default function EditProfile() {
   const isAuth = async () => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
+    } else {
+      getProfile();
     }
   };
 
@@ -31,6 +33,7 @@ export default function EditProfile() {
         `http://localhost:5000/accounts/profile/${username}`
       );
       setProfile(response?.data?.data?.user);
+      localStorage.setItem("user", JSON.stringify(response?.data?.data?.user));
     } catch (error) {
       console.log(error);
     }
@@ -53,26 +56,63 @@ export default function EditProfile() {
     setOpenModal(false);
     getProfile();
   };
-  //TODO create edit profile and edit password function
+
   const editProfile = async (values) => {
     try {
+      setIsLoading(true);
+      let token = localStorage.getItem("token");
       console.log(values);
+      await axios.patch(
+        `http://localhost:5000/accounts/edit/profile`,
+        {
+          fullname: values.fullName,
+          username: values.username,
+          bio: values.bio,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      );
+      toast.success("Profile updated!");
+      setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message);
+      setIsLoading(false);
     }
   };
 
   const editPassword = async (values) => {
     try {
+      setIsLoading(true);
+      let token = localStorage.getItem("token");
       console.log(values);
+      await axios.patch(
+        `http://localhost:5000/accounts/edit/password`,
+        {
+          oldPassword: values.oldPassword,
+          newPassword: values.newPassword,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      );
+      toast.success("Password updated!");
+      setIsLoading(false);
+      setTimeout(() => handleLogout(), 3000);
     } catch (error) {
       console.log(error);
+      toast.error(error?.response?.data?.message);
+      setIsLoading(false);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
   };
 
   useEffect(() => {
     isAuth();
-    getProfile();
   }, []);
 
   //Validasi Formik/yup

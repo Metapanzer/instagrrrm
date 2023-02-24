@@ -58,7 +58,7 @@ module.exports = {
   allContent: async (req, res) => {
     try {
       let allContents = await sequelize.query(
-        "SELECT contents.id, contents.media, contents.caption, contents.like, contents.createdAt, users.username FROM contents JOIN users ON contents.users_id = users.id;"
+        "SELECT contents.id, contents.media, contents.caption, contents.like, contents.createdAt, users.username, users.profile_picture FROM contents JOIN users ON contents.users_id = users.id ORDER BY contents.createdAt DESC;"
       );
 
       res.status(200).send({
@@ -80,7 +80,6 @@ module.exports = {
 
       let response = await contents.findAll({
         where: { users_id },
-        // include: { model: users, attributes: ["username"] },
       });
 
       res.status(200).send({
@@ -100,7 +99,7 @@ module.exports = {
     try {
       let contents_id = req.params.id;
       let detail = await sequelize.query(
-        `SELECT contents.*, users.username FROM contents JOIN users ON contents.users_id = users.id WHERE contents.id = ${contents_id};`
+        `SELECT contents.*, users.username, users.profile_picture FROM contents JOIN users ON contents.users_id = users.id WHERE contents.id = ${contents_id};`
       );
 
       let comment = await comments.findAll({

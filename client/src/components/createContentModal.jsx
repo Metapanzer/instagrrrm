@@ -43,7 +43,7 @@ export default function CreateContentModal({ onExit }) {
       );
       toast.success("Upload Success!");
       setIsLoading(false);
-      setTimeout(() => onExit(), 2000);
+      setTimeout(() => window.location.reload(), 2000);
     } catch (error) {
       setIsLoading(false);
       if (error?.response?.data?.message === "You session has been expired.") {
@@ -55,12 +55,6 @@ export default function CreateContentModal({ onExit }) {
       toast.error(error?.response?.data?.message);
     }
   };
-
-  //Validasi Formik/yup
-  // const ContentSchema = Yup.object().shape({
-  //   media: Yup.mixed(),
-  //   caption: Yup.string(),
-  // });
 
   //Make input useformik
   const formik = useFormik({

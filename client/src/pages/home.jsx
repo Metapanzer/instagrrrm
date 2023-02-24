@@ -11,6 +11,8 @@ export default function Home() {
   const isAuth = async () => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
+    } else {
+      getProfile();
     }
   };
 
@@ -28,7 +30,6 @@ export default function Home() {
 
   useEffect(() => {
     isAuth();
-    getProfile();
   }, []);
 
   return (

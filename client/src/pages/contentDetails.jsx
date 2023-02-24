@@ -16,7 +16,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike, BiChat } from "react-icons/bi";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Form } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 
 export default function ContentDetails() {
@@ -46,14 +46,15 @@ export default function ContentDetails() {
     }
   };
 
-  const submitComment = async (value) => {
+  const submitComment = async (comment_body) => {
     try {
       setIsLoading(true);
       const { contents_id } = params;
       const token = localStorage.getItem("token");
+      console.log(comment_body);
       await axios.post(
         `http://localhost:5000/contents/media/comment/${contents_id}`,
-        value,
+        { comment_body },
         {
           headers: { Authorization: token },
         }
@@ -101,7 +102,11 @@ export default function ContentDetails() {
                     <Avatar
                       onClick={() => navigate(`/profile/${content.username}`)}
                       name={content.username}
-                      src="/images/default.png"
+                      src={
+                        content.profile_picture
+                          ? `http://localhost:5000/${content.profile_picture}`
+                          : null
+                      }
                     />
 
                     <Box>
@@ -183,10 +188,12 @@ export default function ContentDetails() {
             name="comment"
             id="comment"
             placeholder="Add a comment here..."
+            required={true}
             onChange={(event) => setCommentBody(event.target.value)}
             className="w-11/12 pl-2"
           />
           <Button
+            isDisabled={!commentBody}
             isLoading={isLoading}
             loadingText="Submitting"
             type="submit"

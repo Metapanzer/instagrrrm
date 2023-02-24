@@ -15,7 +15,7 @@ Router.patch(
   uploadImages,
   userControllers.changePicture
 );
-// Router.patch("/edit/profile", verifyToken, userControllers.changePicture);
-// Router.patch("/edit/password", verifyToken, userControllers.changePicture);
+Router.patch("/edit/profile", verifyToken, userControllers.changeProfile);
+Router.patch("/edit/password", verifyToken, userControllers.changePassword);
 
 module.exports = Router;

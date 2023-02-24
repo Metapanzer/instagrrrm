@@ -186,4 +186,91 @@ module.exports = {
       });
     }
   },
+  changeProfile: async (req, res) => {
+    const t = await sequelize.transaction();
+    try {
+      const id = req.dataDecode.id;
+      const fullname = req.body.fullname;
+      const username = req.body.username;
+      const bio = req.body.bio;
+
+      await users.update(
+        {
+          fullname,
+          username,
+          bio,
+        },
+        { where: { id } },
+        { transaction: t }
+      );
+
+      t.commit();
+      res.status(201).send({
+        isError: false,
+        message: "Profile updated!",
+        data: {
+          id,
+          fullname,
+          username,
+          bio,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      t.rollback();
+      res.status(409).send({
+        isError: true,
+        message: error.errors[0].message.replace("_UNIQUE", ""),
+        data: null,
+      });
+    }
+  },
+  changePassword: async (req, res) => {
+    const t = await sequelize.transaction();
+    try {
+      const id = req.dataDecode.id;
+      let oldPassword = req.body.oldPassword;
+      let password = req.body.newPassword;
+
+      const findPassword = await users.findOne({
+        where: { id },
+      });
+
+      const hasMatchResult = await hashMatch(
+        oldPassword,
+        findPassword.dataValues.password
+      );
+
+      if (hasMatchResult === false) {
+        res.status(400).send({
+          isError: true,
+          message: "Incorrect old password",
+          data: null,
+        });
+      } else {
+        await users.update(
+          {
+            password: await hashPassword(password),
+          },
+          { where: { id } },
+          { transaction: t }
+        );
+
+        t.commit();
+        res.status(201).send({
+          isError: false,
+          message: "Password updated!",
+          data: null,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      t.rollback();
+      res.status(404).send({
+        isError: true,
+        message: error.message,
+      });
+      console.log(error);
+    }
+  },
 };

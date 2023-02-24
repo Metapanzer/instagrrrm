@@ -29,7 +29,7 @@ export default function ContentCard() {
       const response = await axios.get(
         "http://localhost:5000/contents/media/all"
       );
-      setContents(response.data.data.reverse());
+      setContents(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -54,7 +54,6 @@ export default function ContentCard() {
         `http://localhost:5000/accounts/profile/${username}`
       );
       setProfile(response?.data?.data?.user);
-      getAllContent();
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +61,7 @@ export default function ContentCard() {
 
   useEffect(() => {
     getProfile();
+    getAllContent();
   }, []);
 
   return (
@@ -80,7 +80,7 @@ export default function ContentCard() {
                       borderColor="blue.500"
                       src={
                         profile.profile_picture
-                          ? `http://localhost:5000/${profile.profile_picture}`
+                          ? `http://localhost:5000/${content.profile_picture}`
                           : null
                       }
                     />
