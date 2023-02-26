@@ -273,4 +273,25 @@ module.exports = {
       console.log(error);
     }
   },
+  //TODO: finish verification email logic
+  verifyEmail: async (req, res) => {
+    try {
+      const id = req?.dataDecode?.id;
+
+      await users.update({ is_verified: 1 }, { where: { id } });
+
+      res.status(200).send({
+        isError: false,
+        message: "Email verified!",
+        data: null,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(404).send({
+        isError: true,
+        message: "Verification link expired",
+        data: null,
+      });
+    }
+  },
 };
