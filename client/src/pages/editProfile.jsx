@@ -40,6 +40,7 @@ export default function EditProfile() {
   };
 
   const verifyEmail = async () => {
+    //TODO: send email verification to BE
     try {
       setDisableVerify(true);
       console.log("verify email");

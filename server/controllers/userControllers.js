@@ -38,6 +38,7 @@ module.exports = {
       //TODO: add token for email verification
       let newTemplate = compiledTemplate({
         fullname: fullname,
+        token: createToken({ id: id }),
       });
       await transporter.sendMail({
         from: "Instagrrrm",
@@ -291,6 +292,26 @@ module.exports = {
         message: "Verification link expired",
         data: null,
       });
+    }
+  },
+  sendEmailVerification: async (req, res) => {
+    //TODO: create logic to resend verification email
+    try {
+      let template = await fs.readFile("./template/verification.html", "utf-8");
+      let compiledTemplate = await handlebars.compile(template);
+      //TODO: add token for email verification
+      let newTemplate = compiledTemplate({
+        fullname: fullname,
+        token: createToken({ id: id }),
+      });
+      await transporter.sendMail({
+        from: "Instagrrrm",
+        to: email,
+        subject: "Email Verification",
+        html: newTemplate,
+      });
+    } catch (error) {
+      console.log(error);
     }
   },
 };
