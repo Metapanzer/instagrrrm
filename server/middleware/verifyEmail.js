@@ -13,7 +13,7 @@ const verifyEmail = (req, res, next) => {
   jwt.verify(token, process.env.JWT_KEY, (err, data) => {
     try {
       if (err) {
-        return res.status(401).send({
+        return res.status(498).send({
           error: true,
           message: "Verification link expired!",
           data: null,

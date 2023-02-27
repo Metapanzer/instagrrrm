@@ -281,7 +281,7 @@ module.exports = {
 
       res.status(200).send({
         isError: false,
-        message: "Email verified!",
+        message: "Your email address have been verified, Thank you!!",
         data: null,
       });
     } catch (error) {
