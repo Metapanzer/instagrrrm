@@ -2,6 +2,7 @@ const express = require("express");
 const Router = express.Router();
 const uploadImages = require("../middleware/uploadImages");
 const verifyToken = require("../middleware/verifyToken");
+const verifyEmail = require("../middleware/verifyEmail");
 
 // Import Controller
 const { userControllers } = require("../controllers");
@@ -17,6 +18,6 @@ Router.patch(
 );
 Router.patch("/edit/profile", verifyToken, userControllers.changeProfile);
 Router.patch("/edit/password", verifyToken, userControllers.changePassword);
-Router.post("/verify/:token", verifyToken, userControllers.verifyEmail);
+Router.patch("/verify/:token", verifyEmail, userControllers.verifyEmail);
 
 module.exports = Router;

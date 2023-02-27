@@ -273,10 +273,9 @@ module.exports = {
       console.log(error);
     }
   },
-  //TODO: finish verification email logic
   verifyEmail: async (req, res) => {
     try {
-      const id = req?.dataDecode?.id;
+      const id = req?.tokenDecode?.id;
 
       await users.update({ is_verified: 1 }, { where: { id } });
 
