@@ -10,6 +10,7 @@ const { userControllers } = require("../controllers");
 Router.post("/register", userControllers.register);
 Router.get("/login", userControllers.login);
 Router.get("/profile/:username", userControllers.getProfile);
+Router.get("/verify/sent", verifyToken, userControllers.sendEmailVerification);
 Router.patch(
   "/edit/picture",
   verifyToken,

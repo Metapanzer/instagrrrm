@@ -19,11 +19,12 @@ const fs = require("fs").promises;
 const handlebars = require("handlebars");
 
 module.exports = {
+  //TODO: create verification email logic and template
   register: async (req, res) => {
     const t = await sequelize.transaction();
     try {
       let { email, fullname, username, password } = req.body;
-      await users.create(
+      let newUser = await users.create(
         {
           email,
           fullname,
@@ -32,13 +33,14 @@ module.exports = {
         },
         { transaction: t }
       );
+      console.log(newUser);
 
       let template = await fs.readFile("./template/verification.html", "utf-8");
       let compiledTemplate = await handlebars.compile(template);
       //TODO: add token for email verification
       let newTemplate = compiledTemplate({
         fullname: fullname,
-        token: createToken({ id: id }),
+        token: createToken({ id: newUser.dataValues.id }),
       });
       await transporter.sendMail({
         from: "Instagrrrm",
@@ -295,23 +297,35 @@ module.exports = {
     }
   },
   sendEmailVerification: async (req, res) => {
-    //TODO: create logic to resend verification email
     try {
+      let id = req.dataDecode.id;
+
+      const userData = await users.findOne({ where: { id } });
+
       let template = await fs.readFile("./template/verification.html", "utf-8");
       let compiledTemplate = await handlebars.compile(template);
-      //TODO: add token for email verification
       let newTemplate = compiledTemplate({
-        fullname: fullname,
-        token: createToken({ id: id }),
+        fullname: userData.dataValues.fullname,
+        token: createToken({ id }),
       });
       await transporter.sendMail({
         from: "Instagrrrm",
-        to: email,
+        to: userData.dataValues.email,
         subject: "Email Verification",
         html: newTemplate,
       });
+      res.status(200).send({
+        isError: false,
+        message: "Email sent!",
+        data: null,
+      });
     } catch (error) {
       console.log(error);
+      res.status(401).send({
+        isError: false,
+        message: "Verification link expired!",
+        data: null,
+      });
     }
   },
 };

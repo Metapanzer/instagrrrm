@@ -40,16 +40,20 @@ export default function EditProfile() {
   };
 
   const verifyEmail = async () => {
-    //TODO: send email verification to BE
     try {
       setDisableVerify(true);
+      let token = localStorage.getItem("token");
       console.log("verify email");
+      await axios.get("http://localhost:5000/accounts/verify/sent", {
+        headers: { Authorization: token },
+      });
       setTimeout(() => setDisableVerify(false), 300000); //enable verify email button in 5 minutes
       toast.success(
         "Email verification link sent, you can send another email in 5 minutes"
       );
     } catch (error) {
       console.log(error);
+      toast.error(error);
     }
   };
 
