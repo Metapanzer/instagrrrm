@@ -187,6 +187,7 @@ export default function ContentDetails() {
             type="text"
             name="comment"
             id="comment"
+            maxLength={300}
             placeholder="Add a comment here..."
             required={true}
             onChange={(event) => setCommentBody(event.target.value)}
