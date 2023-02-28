@@ -19,7 +19,6 @@ const fs = require("fs").promises;
 const handlebars = require("handlebars");
 
 module.exports = {
-  //TODO: create verification email logic and template
   register: async (req, res) => {
     const t = await sequelize.transaction();
     try {
@@ -33,11 +32,9 @@ module.exports = {
         },
         { transaction: t }
       );
-      console.log(newUser);
 
       let template = await fs.readFile("./template/verification.html", "utf-8");
       let compiledTemplate = await handlebars.compile(template);
-      //TODO: add token for email verification
       let newTemplate = compiledTemplate({
         fullname: fullname,
         token: createToken({ id: newUser.dataValues.id }),

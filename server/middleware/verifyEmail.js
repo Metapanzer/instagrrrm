@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const verifyEmail = (req, res, next) => {
-  // Get token from headers
+  // Get token from params
   const token = req.params.token;
 
   if (!token)
