@@ -40,3 +40,6 @@
   <pre><code>npx sequelize-cli model:generate --name contents --attributes media:string,caption:string,like:integer</code></pre>
   - comments: id, comment_body, created_at, contents_id
   <pre><code>npx sequelize-cli model:generate --name comments --attributes comment_body:string</code></pre>
+  
+ - Specification
+ <pre><code>https://purwadhikafullstack.notion.site/Individual-Project-Requirement-6f60ce5486ff41268e6e002a34031f9e</code></pre>
