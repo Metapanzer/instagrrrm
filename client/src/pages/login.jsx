@@ -7,11 +7,14 @@ import * as Yup from "yup";
 import { Button } from "@chakra-ui/react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Toaster, toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/features/authSlice";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const isAuth = async () => {
     if (localStorage.getItem("token")) {
@@ -26,8 +29,11 @@ export default function Login() {
         `${process.env.REACT_APP_API}/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`
         /*`http://localhost:5000/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`*/
       );
+      dispatch(login(response?.data?.data?.user));
       console.log(response);
       localStorage.setItem("token", response?.data?.data?.token);
+      //Test storing on redux store
+
       localStorage.setItem("user", JSON.stringify(response?.data?.data?.user));
       toast.success(response.data.message);
       setIsLoading(false);

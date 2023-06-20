@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@chakra-ui/react";
 import ContentCard from "../components/contentCard";
+import { useSelector } from "react-redux";
 
 export default function Home() {
   const [profile, setProfile] = useState([]);
+  const { username } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const isAuth = async () => {
@@ -55,7 +57,7 @@ export default function Home() {
               onClick={() => navigate(`/profile/${profile.username}`)}
               className="font-bold ml-3 active:text-slate-400"
             >
-              {profile.username}
+              {profile.username} or {username}
             </span>
             <span className="font-normal ml-3">{profile.fullname}</span>
           </div>
