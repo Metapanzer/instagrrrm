@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 //Define PORT and response for default route
-const PORT = process.env.DB_PORT;
+const PORT = 5000;
 app.get("/", (req, res) => {
   res.status(201).send("<h1>Welcome to instagrrrm<h1>");
 });
