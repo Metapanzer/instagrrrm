@@ -9,7 +9,7 @@ app.use(express.json());
 //Define PORT and response for default route
 const PORT = 5000;
 app.get("/", (req, res) => {
-  res.status(201).send("<h1>Welcome to instagrrrm<h1>");
+  res.status(201).send("<h1>Welcome to instagrrrm API<h1>");
 });
 
 //CORS (granting access from different network (front end to back end))

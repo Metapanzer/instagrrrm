@@ -1,6 +1,5 @@
 // Import Sequelize
 const { sequelize } = require("./../models");
-const { Op } = require("sequelize");
 
 // Import models
 const db = require("./../models/index");
@@ -8,17 +7,8 @@ const users = db.users;
 const contents = db.contents;
 const comments = db.comments;
 
-// Import hashing
-const { hashPassword, hashMatch } = require("./../lib/hash");
 // Import deleteFiles helpers
 const deleteFiles = require("./../helpers/deleteFiles");
-
-// Import jwt
-const { createToken } = require("./../lib/jwt");
-const transporter = require("./../helpers/transporter");
-const fs = require("fs").promises;
-const handlebars = require("handlebars");
-const { error } = require("console");
 
 module.exports = {
   createPost: async (req, res) => {

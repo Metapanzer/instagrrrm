@@ -1,6 +1,6 @@
 // Import Sequelize
 const { sequelize } = require("./../models");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 // Import models
 const db = require("./../models/index");
