@@ -1,6 +1,5 @@
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import { useFormik } from "formik";
 import axios from "axios";
-import * as Yup from "yup";
 import {
   Button,
   Modal,
@@ -35,7 +34,7 @@ export default function CreateContentModal({ onExit }) {
       formData.append("images", values.media);
       formData.append("caption", values.caption);
       await axios.post(
-        `http://localhost:5000/contents/media/${users_id}`,
+        `${process.env.REACT_APP_API}contents/media/${users_id}`,
         formData,
         {
           headers: { Authorization: token },

@@ -12,7 +12,7 @@ export default function Verification() {
       const { token } = params;
 
       const response = await axios.patch(
-        `http://localhost:5000/accounts/verify/${token}`
+        `${process.env.REACT_APP_API}accounts/verify/${token}`
       );
       console.log(response?.data?.message);
       setStatus(response?.data?.message);

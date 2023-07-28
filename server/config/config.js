@@ -1,4 +1,5 @@
 require("dotenv").config();
+const mysql2 = require("mysql2");
 
 module.exports = {
   development: {
@@ -8,6 +9,7 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "mysql",
+    dialectModule: mysql2,
   },
   test: {
     username: process.env.DB_USER,
@@ -16,6 +18,7 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "mysql",
+    dialectModule: mysql2,
   },
   production: {
     username: process.env.DB_USER,
@@ -24,5 +27,6 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "mysql",
+    dialectModule: mysql2,
   },
 };

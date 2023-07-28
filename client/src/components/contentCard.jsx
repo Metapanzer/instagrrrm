@@ -27,7 +27,7 @@ export default function ContentCard() {
   const getAllContent = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/contents/media/all"
+        `${process.env.REACT_APP_API}contents/media/all`
       );
       setContents(response.data.data);
     } catch (error) {
@@ -38,7 +38,7 @@ export default function ContentCard() {
   const addLike = async (contents_id) => {
     try {
       await axios.patch(
-        `http://localhost:5000/contents/media/like/${contents_id}`
+        `${process.env.REACT_APP_API}contents/media/like/${contents_id}`
       );
       getAllContent();
       toast.success("Liked!");
@@ -49,9 +49,9 @@ export default function ContentCard() {
 
   const getProfile = async () => {
     try {
-      const username = JSON.parse(localStorage.getItem("user")).username;
+      const username = JSON.parse(localStorage.getItem("user"))?.username;
       const response = await axios.get(
-        `http://localhost:5000/accounts/profile/${username}`
+        `${process.env.REACT_APP_API}accounts/profile/${username}`
       );
       setProfile(response?.data?.data?.user);
     } catch (error) {
@@ -80,7 +80,7 @@ export default function ContentCard() {
                       borderColor="blue.500"
                       src={
                         profile.profile_picture
-                          ? `http://localhost:5000/${content.profile_picture}`
+                          ? `${process.env.REACT_APP_API}${content.profile_picture}`
                           : null
                       }
                     />
@@ -101,7 +101,7 @@ export default function ContentCard() {
               </CardHeader>
               <Image
                 objectFit="cover"
-                src={`http://localhost:5000/${content.media}`}
+                src={`${process.env.REACT_APP_API}${content.media}`}
                 alt="content image"
                 onClick={() => navigate(`/content-details/${content.id}`)}
               />

@@ -1,6 +1,5 @@
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import { useFormik } from "formik";
 import axios from "axios";
-import * as Yup from "yup";
 import {
   Button,
   Modal,
@@ -33,7 +32,7 @@ export default function ProfilePictureModal({ onExit }) {
       let formData = new FormData();
       formData.append("images", values.profile_picture);
       await axios.patch(
-        `http://localhost:5000/accounts/edit/picture`,
+        `${process.env.REACT_APP_API}accounts/edit/picture`,
         formData,
         {
           headers: { Authorization: token },

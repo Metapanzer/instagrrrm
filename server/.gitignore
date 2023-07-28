@@ -4,7 +4,7 @@
 node_modules
 package-lock.json
 config.json
-/config
+config
 
 
 # dotenv environment variable files
@@ -13,3 +13,6 @@ config.json
 .env.test.local
 .env.production.local
 .env.local
+
+Spec.docx
+.vercel

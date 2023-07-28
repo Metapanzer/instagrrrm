@@ -14,7 +14,12 @@ app.get("/", (req, res) => {
 
 //CORS (granting access from different network (front end to back end))
 const cors = require("cors");
-app.use(cors());
+const corsOptions = {
+  origin: ["https://instagrrrm.netlify.app", "180.252.118.254"], // Allow requests from this specific origin
+  // You can add more allowed origins in an array if needed:
+  // origin: ["https://instagrrrm.netlify.app", "https://another-allowed-origin.com"]
+};
+app.use(cors(corsOptions));
 app.use(express.static("public"));
 
 // ### Sequelize Synchronous
@@ -40,3 +45,5 @@ app.use("/contents", contentRouters);
 
 //Run the API
 app.listen(PORT, () => console.log("API running on Port: " + PORT));
+
+module.exports = app;

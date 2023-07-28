@@ -23,7 +23,7 @@ export default function Register() {
   const handleRegister = async (values) => {
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:5000/accounts/register", {
+      await axios.post(`${process.env.REACT_APP_API}accounts/register`, {
         email: values.email,
         username: values.username,
         fullname: values.fullname,

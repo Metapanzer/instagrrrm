@@ -13,7 +13,7 @@ export default function Profile() {
     try {
       const username = params.username;
       const response = await axios.get(
-        `http://localhost:5000/accounts/profile/${username}`
+        `${process.env.REACT_APP_API}accounts/profile/${username}`
       );
       setUserData(response?.data?.data?.user);
       getUserContent(response?.data?.data?.user?.id);
@@ -25,7 +25,7 @@ export default function Profile() {
   const getUserContent = async (users_id) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/contents/${users_id}`
+        `${process.env.REACT_APP_API}contents/${users_id}`
       );
       setContents(response?.data?.data.reverse());
     } catch (error) {
@@ -48,7 +48,7 @@ export default function Profile() {
             borderColor="blue.500"
             src={
               userData.profile_picture
-                ? `http://localhost:5000/${userData.profile_picture}`
+                ? `${process.env.REACT_APP_API}${userData.profile_picture}`
                 : undefined
             }
             className="w-36 h-36"
@@ -78,7 +78,9 @@ export default function Profile() {
               onClick={() => navigate(`/content-details/${content.id}`)}
               key={index}
               src={
-                contents ? `http://localhost:5000/${content.media}` : undefined
+                contents
+                  ? `${process.env.REACT_APP_API}${content.media}`
+                  : undefined
               }
               alt={content.id}
               className="w-64 h-64"

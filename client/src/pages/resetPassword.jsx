@@ -1,5 +1,5 @@
 //Import dependencies
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -20,7 +20,7 @@ export default function ResetPassword() {
       setOpenModal(true);
       setIsLoading(true);
       // const response = await axios.get(
-      //   `http://localhost:5000/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`
+      //   `${process.env.REACT_APP_API}accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`
       // );
       // console.log(response);
       // localStorage.setItem("token", response?.data?.data?.token);

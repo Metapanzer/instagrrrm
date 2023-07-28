@@ -30,7 +30,7 @@ export default function EditProfile() {
     try {
       const username = JSON.parse(localStorage.getItem("user")).username;
       const response = await axios.get(
-        `http://localhost:5000/accounts/profile/${username}`
+        `${process.env.REACT_APP_API}accounts/profile/${username}`
       );
       setProfile(response?.data?.data?.user);
       localStorage.setItem("user", JSON.stringify(response?.data?.data?.user));
@@ -44,7 +44,7 @@ export default function EditProfile() {
       setDisableVerify(true);
       let token = localStorage.getItem("token");
       console.log("verify email");
-      await axios.get("http://localhost:5000/accounts/verify/sent", {
+      await axios.get(`${process.env.REACT_APP_API}accounts/verify/sent`, {
         headers: { Authorization: token },
       });
       setTimeout(() => setDisableVerify(false), 300000); //enable verify email button in 5 minutes
@@ -68,7 +68,7 @@ export default function EditProfile() {
       let token = localStorage.getItem("token");
       console.log(values);
       await axios.patch(
-        `http://localhost:5000/accounts/edit/profile`,
+        `${process.env.REACT_APP_API}accounts/edit/profile`,
         {
           fullname: values.fullName,
           username: values.username,
@@ -92,7 +92,7 @@ export default function EditProfile() {
       let token = localStorage.getItem("token");
       console.log(values);
       await axios.patch(
-        `http://localhost:5000/accounts/edit/password`,
+        `${process.env.REACT_APP_API}accounts/edit/password`,
         {
           oldPassword: values.oldPassword,
           newPassword: values.newPassword,
@@ -166,7 +166,7 @@ export default function EditProfile() {
             borderColor="blue.500"
             src={
               profile.profile_picture
-                ? `http://localhost:5000/${profile.profile_picture}`
+                ? `${process.env.REACT_APP_API}${profile.profile_picture}`
                 : null
             }
           />

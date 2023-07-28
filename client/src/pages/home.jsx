@@ -20,7 +20,7 @@ export default function Home() {
     try {
       const username = JSON.parse(localStorage.getItem("user")).username;
       const response = await axios.get(
-        `http://localhost:5000/accounts/profile/${username}`
+        `${process.env.REACT_APP_API}accounts/profile/${username}`
       );
       setProfile(response?.data?.data?.user);
     } catch (error) {
@@ -46,7 +46,7 @@ export default function Home() {
             borderColor="blue.500"
             src={
               profile.profile_picture
-                ? `http://localhost:5000/${profile.profile_picture}`
+                ? `${process.env.REACT_APP_API}${profile.profile_picture}`
                 : null
             }
           />

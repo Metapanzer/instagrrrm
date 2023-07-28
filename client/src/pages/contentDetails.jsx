@@ -16,7 +16,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiLike, BiChat } from "react-icons/bi";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Form } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 
 export default function ContentDetails() {
@@ -37,7 +37,7 @@ export default function ContentDetails() {
     try {
       const { contents_id } = params;
       const response = await axios.get(
-        `http://localhost:5000/contents/media/content-details/${contents_id}`
+        `${process.env.REACT_APP_API}contents/media/content-details/${contents_id}`
       );
       setContents(response.data?.data);
       setComments(response.data?.comment);
@@ -53,7 +53,7 @@ export default function ContentDetails() {
       const token = localStorage.getItem("token");
       console.log(comment_body);
       await axios.post(
-        `http://localhost:5000/contents/media/comment/${contents_id}`,
+        `${process.env.REACT_APP_API}contents/media/comment/${contents_id}`,
         { comment_body },
         {
           headers: { Authorization: token },
@@ -76,7 +76,7 @@ export default function ContentDetails() {
     try {
       const { contents_id } = params;
       await axios.patch(
-        `http://localhost:5000/contents/media/like/${contents_id}`
+        `${process.env.REACT_APP_API}contents/media/like/${contents_id}`
       );
       getContentDetails();
       toast.success("Liked!");
@@ -104,7 +104,7 @@ export default function ContentDetails() {
                       name={content.username}
                       src={
                         content.profile_picture
-                          ? `http://localhost:5000/${content.profile_picture}`
+                          ? `${process.env.REACT_APP_API}${content.profile_picture}`
                           : null
                       }
                     />
@@ -128,7 +128,7 @@ export default function ContentDetails() {
               </CardHeader>
               <Image
                 objectFit="cover"
-                src={`http://localhost:5000/${content.media}`}
+                src={`${process.env.REACT_APP_API}${content.media}`}
                 alt="Chakra UI"
               />
               <CardBody>

@@ -23,8 +23,7 @@ export default function Login() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_API}/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`
-        /*`http://localhost:5000/accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`*/
+        `${process.env.REACT_APP_API}accounts/login?emailOrUsername=${values.emailorusername}&password=${values.password}`
       );
       console.log(response);
       localStorage.setItem("token", response?.data?.data?.token);
